@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
     # Apps
     'converter',
 ]
@@ -80,8 +81,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'cconverter',
-        'USER': 'cconverter',
-        'PASSWORD': 'cconverter-pass',
+        'USER': 'root',
+        'PASSWORD': 'db-r00t-dev',
         'HOST': 'db',
         'PORT': 3306,
     }
