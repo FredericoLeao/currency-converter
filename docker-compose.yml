@@ -25,3 +25,14 @@ services:
       - ./mysql:/var/lib/mysql
     networks:
       - default
+  vue-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.vue-app
+    ports:
+      - "5173:5173"
+    command: sh -c "yarn install;chmod -R a+rwx node_modules;yarn dev"
+    volumes:
+      - .:/app
+    networks:
+      - default
