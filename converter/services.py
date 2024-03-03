@@ -5,7 +5,7 @@ from converter.models import CurrencyValues
 EXT_PRICE_API='https://economia.awesomeapi.com.br/json/last'
 ACCEPTED_CODES = ['BRL', 'EUR', 'BTC', 'ETH']
 CRYPTO_CURRENCIES = ['ETH', 'BTC']
-CACHE_TTL = 180 # the time in seconds the currency price cache will be valid
+CACHE_TTL = 10 # the time in seconds the currency price cache will be valid
 
 
 class CurrencyConvertService:
@@ -48,6 +48,8 @@ class CurrencyConvertService:
     def convert(self, data) -> float:
         src_usd_price = self.get_usd_price(data['src_currency'])
         tgt_usd_price = self.get_usd_price(data['tgt_currency'])
-        converted_value = ((float(src_usd_price) * float(data['amount']))
-                           * (1 / float(tgt_usd_price)))
+        if float(src_usd_price) < 0 or float(tgt_usd_price) < 0:
+            return -1
+        converted_value = ((float(src_usd_price) * float(data['amount'])) *
+                           (1 / float(tgt_usd_price)))
         return converted_value
