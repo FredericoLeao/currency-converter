@@ -22,7 +22,7 @@ class CurrencyConvertTestCase(APITestCase):
     def test_currencyconvert_invalid_amount2(self):
         res = self.client.get('/api/convert/USD/BRL/1000,345/')
         self.assertEqual(res.status_code, 400)
-        self.assertContains(res, 'valid number is required', status_code=400)
+        self.assertContains(res, 'inválido', status_code=400)
 
     @patch('converter.services.requests.get')
     def test_currencyconvert_valid(self, mock_get):
