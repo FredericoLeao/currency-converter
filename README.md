@@ -13,6 +13,15 @@ Converte valores entre as moedas: BRL, USD, EUR, BTC, ETH
 ## Instalar e executar o projeto
 
 - Clone o projeto
+
 - Dentro do diretório, execute: ```docker compose up --build -d```
-- Acesse http://localhost
+
+- Aguarde até que finalize a instalação dos pacotes do Python e do VueJS
+
+  - Acompanhe, se necessário, com ```docker compose logs -t -f```
+
+- Acesso front-end http://localhost
+
+- Acesso API(opcional), exemplo: http://localhost/api/convert/BRL/EUR/100
+
 - Para executar testes unitários: ```docker compose exec -ti app python3 manage.py test```
