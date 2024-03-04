@@ -115,7 +115,10 @@ const convertAmount = () => {
   requestTimeout.value = setTimeout(() => {
     axios.get(`/api/convert/${srcCurrency.value}/${tgtCurrency.value}/${amount.value}/`)
       .then((response) => {
-        convertedAmount.value = response.data;
+        if (response.data['converted_amount'])
+          convertedAmount.value = response.data['converted_amount'];
+        else
+          responseError.value = 'Erro inesperado';
       })
       .catch((errors) => {
         responseError.value = errors.response.data;

@@ -13,4 +13,5 @@ class CurrencyConvertAPIView(APIView):
                             status=HTTP_403_FORBIDDEN)
         converter_service = CurrencyConvertService()
         convert_result = converter_service.convert(data_serialized.data)
-        return Response(data=convert_result, status=HTTP_200_OK)
+        return Response(data={'converted_amount': convert_result},
+                        status=HTTP_200_OK)

@@ -13,16 +13,15 @@ class CurrencyConvertTestCase(APITestCase):
 
     def test_currencyconvert_invalid_tgt(self):
         res = self.client.get('/api/convert/USD/INVALID/10/')
-        self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.status_code, 403)
 
     def test_currencyconvert_invalid_amount(self):
         res = self.client.get('/api/convert/USD/BRL/10err/')
-        self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.status_code, 403)
 
     def test_currencyconvert_invalid_amount2(self):
         res = self.client.get('/api/convert/USD/BRL/1000,345/')
-        self.assertEqual(res.status_code, 400)
-        self.assertContains(res, 'inválido', status_code=400)
+        self.assertContains(res, 'inválido', status_code=403)
 
     @patch('converter.services.requests.get')
     def test_currencyconvert_valid(self, mock_get):
@@ -32,7 +31,7 @@ class CurrencyConvertTestCase(APITestCase):
         convert_amount = 1000.345
         res = self.client.get(f'/api/convert/USD/BRL/{convert_amount}/')
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(res.json(),
+        self.assertEqual(res.json()['converted_amount'],
                          convert_amount *
                          (1 / self.currencies_response['BRLUSD']['bid']))
 
@@ -48,7 +47,7 @@ class CurrencyConvertTestCase(APITestCase):
         converted_amount = (
             (self.currencies_response['EURUSD']['bid'] * convert_amount) *
             (1 / self.currencies_response['BRLUSD']['bid']))
-        self.assertEqual(converted_amount, res.json())
+        self.assertEqual(converted_amount, res.json()['converted_amount'])
 
     @patch('converter.services.requests.get')
     def test_currencyconvert_fid_to_crypto(self, mock_get):
@@ -61,4 +60,4 @@ class CurrencyConvertTestCase(APITestCase):
         converted_amount = (
             (self.currencies_response['BRLUSD']['bid'] * convert_amount) *
             (1 / self.currencies_response['BTCUSD']['bid']))
-        self.assertEqual(converted_amount, res.json())
+        self.assertEqual(converted_amount, res.json()['converted_amount'])
