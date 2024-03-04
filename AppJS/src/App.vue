@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="row p-4 mt-5">
-      <div class="col-12 col-md-2 offset-md-4">
+      <div class="col-12 col-sm-6 col-md-4 offset-md-2 col-lg-3 offset-lg-3 col-xxl-2 offset-xxl-4">
         <div class="p-2">
           <input
             type="text"
@@ -29,7 +29,7 @@
           </select>
         </div>
       </div>
-      <div class="col-md-2">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2">
         <div class="py-5">
           <template v-if="srcCurrency && tgtCurrency && amount > 0">
             <div class="">
