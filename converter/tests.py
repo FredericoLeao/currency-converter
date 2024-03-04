@@ -1,8 +1,9 @@
 from unittest.mock import patch, Mock
 from rest_framework.test import APITestCase
-from .services import CurrencyConvertService
+
 
 class CurrencyConvertTestCase(APITestCase):
+    '''Currency Convert API tests'''
     def setUp(self) -> None:
         self.currencies_response = {
             'BRLUSD': {'bid': 0.2018},
@@ -12,19 +13,23 @@ class CurrencyConvertTestCase(APITestCase):
         return super().setUp()
 
     def test_currencyconvert_invalid_tgt(self):
+        '''Try an invalid currency code'''
         res = self.client.get('/api/convert/USD/INVALID/10/')
         self.assertEqual(res.status_code, 403)
 
     def test_currencyconvert_invalid_amount(self):
+        '''Try an invalid amount input 2'''
         res = self.client.get('/api/convert/USD/BRL/10err/')
         self.assertEqual(res.status_code, 403)
 
     def test_currencyconvert_invalid_amount2(self):
+        '''Try an invalid amount input 2'''
         res = self.client.get('/api/convert/USD/BRL/1000,345/')
         self.assertContains(res, 'inválido', status_code=403)
 
     @patch('converter.services.requests.get')
     def test_currencyconvert_valid(self, mock_get):
+        '''Simple convertion from USD to BRL'''
         mock_get.return_value = Mock()
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = self.currencies_response
@@ -37,6 +42,7 @@ class CurrencyConvertTestCase(APITestCase):
 
     @patch('converter.services.requests.get')
     def test_currencyconvert_nonusd(self, mock_get):
+        '''Convertion between non USD currencies'''
         mock_get.return_value = Mock()
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = self.currencies_response
@@ -51,6 +57,7 @@ class CurrencyConvertTestCase(APITestCase):
 
     @patch('converter.services.requests.get')
     def test_currencyconvert_fid_to_crypto(self, mock_get):
+        '''Convert Fid to Crypto'''
         mock_get.return_value = Mock()
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = self.currencies_response
