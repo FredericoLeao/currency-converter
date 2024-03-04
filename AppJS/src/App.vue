@@ -33,13 +33,13 @@
         <div class="py-5">
           <template v-if="srcCurrency && tgtCurrency && amount > 0">
             <div class="">
-              <p><b>{{ srcCurrency }}</b> {{ amount }}</p>
+              <p><b>{{ srcCurrency }}</b> {{ formatCurrency(amount, srcCurrency) }}</p>
             </div>
             <div v-if="httpLoading">
               <div class="loader"></div>
             </div>
             <div v-else>
-              <p><b>{{ tgtCurrency }}</b> {{ convertedAmount.toFixed(tgtCurrencyDecimals) }}</p>
+              <p><b>{{ tgtCurrency }}</b> {{ formatCurrency(convertedAmount, tgtCurrency) }}</p>
             </div>
           </template>
           <div v-if="!tgtCurrency || !srcCurrency || !amount || parseFloat(amount) <= 0">
@@ -71,20 +71,25 @@ const srcCurrency = ref('');
 const tgtCurrency = ref('');
 
 const currencyOpts = ref([
-  { id: 'USD', name: 'Dólar americano' },
-  { id: 'BRL', name: 'Real Brasileiro' },
-  { id: 'EUR', name: 'Euro' },
+  { id: 'USD', name: 'Dólar americano', localeString: 'en-us' },
+  { id: 'BRL', name: 'Real Brasileiro', localeString: 'pt-br' },
+  { id: 'EUR', name: 'Euro', localeString: 'en-de' },
   { id: 'BTC', name: 'Bitcoin', maskDecimals: 6 },
   { id: 'ETH', name: 'Ethereum' },
 ]);
 const tgtCurrencyOpts = computed(() => currencyOpts.value.filter((c) => c.id !== srcCurrency.value));
 
-const tgtCurrencyDecimals = computed(() => {
-  let precision = currencyOpts.value.find((c) => c.id === tgtCurrency.value)?.maskDecimals;
+const formatCurrency = (value, currencyCode) => {
+  const lstr = currencyOpts.value.find((c) => c.id === currencyCode)?.localeString;
+  if (lstr)
+    return parseFloat(value).toLocaleString(lstr, { style: 'currency', currency: currencyCode });
+
+  let precision = currencyOpts.value.find((c) => c.id === currencyCode)?.maskDecimals;
   if (!precision)
     precision = 2;
-  return precision;
-});
+  return parseFloat(value).toFixed(precision);
+}
+
 const moneyMask = computed(() => {
   let precision = currencyOpts.value.find((c) => c.id === srcCurrency.value)?.maskDecimals;
   if (!precision)
