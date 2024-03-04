@@ -13,6 +13,7 @@
   "dependencies": {
     "axios": "^1.6.7",
     "bootstrap": "^5.3.3",
+    "v-money": "^0.8.1",
     "vue": "^3.4.15"
   },
   "devDependencies": {

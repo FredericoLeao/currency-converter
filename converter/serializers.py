@@ -5,7 +5,7 @@ class CurrencyConvertSerializer(serializers.Serializer):
     tgt_currency = serializers.CharField(max_length=5)
     amount = serializers.DecimalField(
         max_digits=12,
-        decimal_places=4,
+        decimal_places=6,
         error_messages={
             'invalid': 'O número informado é inválido',
             'max_digits': 'O número informado é inválido'})
